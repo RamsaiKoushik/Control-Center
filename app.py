@@ -1,19 +1,36 @@
-# app.py
 import streamlit as st
-from components.full_sync.full_sync_overview import display_full_sync_overview
-from components.full_sync.full_sync_status import display_full_sync_status
-from components.delta_sync.delta_sync_events import display_delta_sync_events
-# from components.poison_pill.poison_pill_monitor import display_poison_pill_monitor
+from pages import home
+from pages.supply import supply, successful_syncs, failed_syncs, total_syncs
+from utils.navigation import get_query_params, set_query_params
 
-st.title("Operational Visibility Dashboard")
+# # Initialize session state
+# if 'page' not in st.session_state:
+#     st.session_state.page = 'home'
 
-# Display each section
-st.header("Full Sync")
-display_full_sync_overview()
-display_full_sync_status()
+# Get the page from query params
+# params = get_query_params()
+# page = params.get('page', ['home'])[0]
 
-st.header("Delta Sync")
-display_delta_sync_events()
+# page = st.session_state.page
 
-st.header("Poison Pill & DLQ Monitor")
-# display_poison_pill_monitor()
+page = get_query_params()
+
+# Routing Logic
+if page == 'home':
+    home.show()
+elif page == 'supply':
+    supply.show()
+elif page == 'successful_syncs':
+    successful_syncs.show()
+elif page == 'failed_syncs':
+    failed_syncs.show()
+elif page == 'total_syncs':
+    total_syncs.show()
+else:
+    st.write("Page not found!")
+
+# Set the page in session state to persist navigation
+# st.session_state.page = page
+
+# set_query_params(page=page)
+st.session_state.page = page
